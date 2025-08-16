@@ -10,25 +10,19 @@
   <style>
     :root{
       --navy:#0b2a4a;
-      --charcoal:#1f2937;
-      --ink:#0f172a;
-      --slate:#334155;
-      --muted:#64748b;
       --bg:#0b1220;
-      --card:#0f1a2a;
-      --ring:rgba(59,130,246,.45);
-      --white:#ffffff;
       --offwhite:#f8fafc;
       --soft:#e2e8f0;
-      --shadow:0 10px 30px rgba(2,8,23,.30);
+      --glow:1; /* default brightness */
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
       color:var(--offwhite);
       background: radial-gradient(1200px 600px at 70% -10%, #173454 0%, #0b1220 45%, #0b1220 100%);
+      transition:background 0.3s ease;
+      filter:brightness(var(--glow));
     }
 
     .site-header{
@@ -36,7 +30,10 @@
       backdrop-filter:saturate(160%) blur(8px);
       background:linear-gradient(180deg, rgba(11,18,32,.9), rgba(11,18,32,.6));
       border-bottom:1px solid rgba(148,163,184,.15);
+      transition:box-shadow 0.3s ease;
     }
+    .site-header.scrolled{ box-shadow:0 4px 20px rgba(59,130,246,.35); }
+
     .wrap{max-width:1100px; margin:0 auto; padding:0 20px}
     .bar{display:flex; align-items:center; justify-content:space-between; height:68px;}
     .brand{display:flex; align-items:center; gap:.6rem; text-decoration:none;}
@@ -47,33 +44,19 @@
       box-shadow:0 6px 16px rgba(11,42,74,.35);
     }
     .brand-name{font-weight:700; letter-spacing:.2px; color:var(--offwhite)}
-    nav a{
-      color:var(--soft); text-decoration:none; font-weight:600; margin-left:22px;
-    }
+
+    nav a{ color:var(--soft); text-decoration:none; font-weight:600; margin-left:22px; }
     nav a:hover{color:#dbeafe}
 
-    .hero{padding:96px 20px 64px}
-    .hero .wrap{display:grid; gap:18px; text-align:center}
-    .headline{
-      font-size: clamp(28px, 5vw, 44px);
-      line-height:1.1; font-weight:800; letter-spacing:.2px;
-      color:#e6f0ff;
-      text-shadow:0 8px 30px rgba(59,130,246,.18);
-    }
-    .sub{
-      color:#cbd5e1; font-size: clamp(15px, 2.4vw, 18px);
-      max-width:820px; margin:0 auto;
-    }
-    .pill{
-      display:inline-flex; gap:.5rem; align-items:center; justify-content:center;
-      border:1px solid rgba(148,163,184,.2); border-radius:999px; padding:8px 14px;
-      color:#dbeafe; background:rgba(11,42,74,.18)
-    }
+    .hero{padding:96px 20px 64px; transition:filter 0.3s ease;}
+    .hero .wrap{text-align:center}
+    .headline{ font-size: clamp(28px, 5vw, 44px); line-height:1.1; font-weight:800; color:#e6f0ff; }
+    .sub{ color:#cbd5e1; font-size: clamp(15px, 2.4vw, 18px); max-width:820px; margin:0 auto; }
 
     .section{padding:56px 20px}
-    .section h2{
-      font-size: clamp(22px, 3vw, 28px); margin:0 0 20px; color:#e5e7eb;
-    }
+    .section h2{ font-size: clamp(22px, 3vw, 28px); margin:0 0 20px; color:#e5e7eb; }
+    .pill{ display:inline-block; border:1px solid rgba(148,163,184,.2); border-radius:999px; padding:6px 12px; color:#dbeafe; background:rgba(11,42,74,.25); font-size:14px; }
+
     .grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:26px; }
     @media (max-width:840px){ .grid{grid-template-columns:1fr} }
 
@@ -81,125 +64,84 @@
       background:linear-gradient(180deg, rgba(19,31,49,.8), rgba(11,18,32,.9));
       border:1px solid rgba(148,163,184,.18);
       border-radius:18px; padding:22px;
-      box-shadow:var(--shadow);
-      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      box-shadow:0 0 0 rgba(59,130,246,.0);
+      transition:transform .3s ease, box-shadow .3s ease, filter .3s ease;
     }
-    .card:hover{ transform: translateY(-2px); border-color:rgba(148,163,184,.35) }
-    .logo-wrap{
-      display:grid; place-items:center;
-      background:radial-gradient(600px 160px at 50% -20%, rgba(59,130,246,.18), rgba(2,8,23,0));
-      border-radius:14px; padding:26px; border:1px dashed rgba(148,163,184,.2)
-    }
-    .logo{max-width:420px; width:100%; height:auto; display:block; filter:drop-shadow(0 10px 18px rgba(2,8,23,.5))}
-    .card h3{margin:16px 0 6px; font-size:20px; color:#e8eef8}
-    .card p{margin:0 0 14px; color:#c7d2fe}
-    .links{display:flex; gap:12px; flex-wrap:wrap}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-      text-decoration:none; font-weight:700; letter-spacing:.2px;
-      padding:10px 14px; border-radius:12px; border:1px solid transparent;
-      background:#173454; color:#e6f0ff;
-      box-shadow:0 8px 20px rgba(23,52,84,.35);
-    }
-    .btn:hover{ filter:brightness(1.08) }
+    .card:hover{ transform: translateY(-2px); box-shadow:0 0 25px rgba(59,130,246,.35); filter:brightness(1.1); }
 
-    .btn-outline{ background:transparent; color:#dbeafe; border-color:rgba(148,163,184,.35) }
-    .btn-outline:hover{ background:rgba(148,163,184,.08) }
+    .logo{max-width:420px; width:100%; height:auto; display:block;}
 
-    .contact{
-      margin-top:14px;
-      display:flex; align-items:center; justify-content:space-between; gap:18px;
-      background:linear-gradient(135deg, rgba(11,42,74,.35), rgba(2,8,23,.5));
-      border:1px solid rgba(148,163,184,.22); border-radius:16px; padding:18px 20px;
-    }
-    @media (max-width:720px){ .contact{flex-direction:column; align-items:flex-start} }
+    .contact{ margin-top:20px; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:18px; border:1px solid rgba(148,163,184,.2); border-radius:14px; background:rgba(11,42,74,.2); }
+    .btn{ text-decoration:none; background:#173454; color:#e6f0ff; padding:10px 14px; border-radius:12px; font-weight:700; }
+    .btn:hover{ filter:brightness(1.15); }
 
-    footer{
-      padding:40px 20px 60px; color:#94a3b8; border-top:1px solid rgba(148,163,184,.15);
-      background:linear-gradient(0deg, rgba(2,8,23,.55), rgba(2,8,23,0));
-    }
-    .foot{display:flex; align-items:center; justify-content:space-between; gap:16px}
-    @media (max-width:720px){ .foot{flex-direction:column; align-items:flex-start} }
-    .small{font-size:14px}
-    .muted{color:#9fb3c8}
-
-    :target::before{content:""; display:block; height:84px; margin-top:-84px; visibility:hidden}
+    footer{ padding:40px 20px; text-align:center; font-size:14px; color:#94a3b8; border-top:1px solid rgba(148,163,184,.15);}
   </style>
 </head>
 <body>
   <header class="site-header">
     <div class="wrap bar">
-      <a class="brand" href="#">
-        <span class="brand-badge">ILP</span>
-        <span class="brand-name">ILP Technologies</span>
-      </a>
-      <nav aria-label="Primary">
-        <a href="#mission">Mission</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#contact">Contact</a>
-      </nav>
+      <a class="brand" href="#"><span class="brand-badge">ILP</span><span class="brand-name">ILP Technologies</span></a>
+      <nav><a href="#mission">Mission</a><a href="#portfolio">Portfolio</a><a href="#contact">Contact</a></nav>
     </div>
   </header>
 
   <main>
-    <!-- Hero -->
     <section id="mission" class="hero">
       <div class="wrap">
         <h1 class="headline">Industry-specific software that streamlines processes to save time, reduce costs, and improve cashflow.</h1>
-        <p class="sub">ILP Technologies is a holdings company for Healthcare SaaS projects. We build tools that remove friction from daily operations so teams can move faster, stay compliant and get paid sooner.</p>
+        <p class="sub">ILP Technologies is a holdings company for Healthcare focused SaaS projects. We build tools that remove friction from daily operations so teams can move faster, stay compliant and get paid sooner.</p>
       </div>
     </section>
 
-    <!-- Portfolio -->
     <section id="portfolio" class="section">
       <div class="wrap">
         <h2>Our Portfolio</h2>
-        <span class="pill" style="margin-bottom:24px; display:inline-block;">Healthcare SaaS • Built for Operators</span>
+        <span class="pill">Healthcare SaaS • Built for operators</span>
         <div class="grid">
-          <!-- OrderSignMD -->
-          <article class="card" aria-labelledby="osmd-title">
-            <a class="logo-wrap" href="https://ordersignmd.com" target="_blank" rel="noopener">
-              <img class="logo" src="assets/img/ordersign-md.png" alt="OrderSignMD logo" />
-            </a>
-            <h3 id="osmd-title">OrderSignMD</h3>
+          <article class="card">
+            <a href="https://ordersignmd.com" target="_blank"><img class="logo" src="assets/img/ordersign-md.png" alt="OrderSignMD logo"></a>
+            <h3>OrderSignMD</h3>
             <p>HIPAA-compliant digital signatures for home health orders designed to imrpove speed, simplicity, and cash-flow.</p>
-            <div class="links">
-              <a class="btn" href="https://ordersignmd.com" target="_blank" rel="noopener">Visit site</a>
-              <a class="btn btn-outline" href="#contact">Contact us</a>
-            </div>
+            <a class="btn" href="https://ordersignmd.com" target="_blank">Visit site</a>
           </article>
-
-          <!-- ClearComply HR -->
-          <article class="card" aria-labelledby="cchr-title">
-            <a class="logo-wrap" href="https://clearcomplyhr.com" target="_blank" rel="noopener">
-              <img class="logo" src="assets/img/clearcomply-hr-logo.png" alt="ClearComply HR logo" />
-            </a>
-            <h3 id="cchr-title">ClearComply HR</h3>
+          <article class="card">
+            <a href="https://clearcomplyhr.com" target="_blank"><img class="logo" src="assets/img/clearcomply-hr-logo.png" alt="ClearComply HR logo"></a>
+            <h3>ClearComply HR</h3>
             <p>Compliance-first HR for healthcare teams to digitize onboarding, credentialing, and audits without the spreadsheet sprawl.</p>
-            <div class="links">
-              <a class="btn" href="https://clearcomplyhr.com" target="_blank" rel="noopener">Visit site</a>
-              <a class="btn btn-outline" href="#contact">Contact us</a>
-            </div>
+            <a class="btn" href="https://clearcomplyhr.com" target="_blank">Visit site</a>
           </article>
         </div>
-
-        <!-- Contact strip -->
         <div id="contact" class="contact">
-          <p class="small">Questions, partnerships, or media? We’d love to connect.</p>
-          <a class="btn" href="mailto:contact@ilptechnologies.com?subject=ILP%20Technologies%20Inquiry">Email us</a>
+          <p>Questions, partnerships, or media? We’d love to connect.</p>
+          <a class="btn" href="mailto:contact@ilptechnologies.com">Email us</a>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="wrap foot">
-      <div class="small muted">We build practical software for real healthcare workflows. No fluff, just measurable results.</div>
-      <div class="small">© <span id="y"></span> ILP Technologies</div>
-    </div>
+    © <span id="y"></span> We build practical software for real healthcare workflows. No fluff, just measurable results.
   </footer>
 
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script>
+    // Year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Scroll effect: brighten as user scrolls
+    window.addEventListener('scroll', () => {
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const scrollPos = window.scrollY;
+      const ratio = scrollPos / maxScroll;
+      // glow ranges from 1 to 1.2
+      const glow = 1 + ratio * 0.2;
+      document.documentElement.style.setProperty('--glow', glow.toFixed(2));
+
+      // Add shadow to header after scroll
+      const header = document.querySelector('.site-header');
+      if(scrollPos > 50){ header.classList.add('scrolled'); }
+      else{ header.classList.remove('scrolled'); }
+    });
+  </script>
 </body>
 </html>
-
